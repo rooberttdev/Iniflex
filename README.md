@@ -1,4 +1,4 @@
-# Projeto Java
+# Teste Prático - Iniflex
 
 Este é um teste prático de programação que consiste no desenvolvimento de um projeto Java para uma indústria, com o objetivo de gerenciar funcionários. O projeto requer a implementação de classes e métodos para manipular dados de funcionários, realizar operações como inserção, remoção, atualização e impressão de informações, além de cálculos como aumento de salário e agrupamento por função.
 
