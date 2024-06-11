@@ -2,7 +2,6 @@ package controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,13 +37,13 @@ public class Principal {
         imprimirSalariosAtuais(funcionariosExcluindoJoao, funcionariosComAumento);
         System.out.println("\n");
 
-        Map<String, List<Funcionario>> funcionariosAgrupadosPorFuncao = funcionarios.stream()
+        Map<String, List<Funcionario>> funcionariosAgrupadosPorFuncao = funcionariosExcluindoJoao.stream()
                 .collect(Collectors.groupingBy(Funcionario::getFuncao));
 
         for (Map.Entry<String, List<Funcionario>> entry : funcionariosAgrupadosPorFuncao.entrySet()) {
             System.out.println("Função: " + entry.getKey());
             for (Funcionario funcionario : entry.getValue()) {
-                System.out.printf("Nome: %s, Salário: %s\n", funcionario.getNome(), formatarNumero(funcionario.getSalario()));
+                System.out.printf("Nome: %s, Salário: %s\n", funcionario.getNome(), FuncionarioUtil.formatarNumero(funcionario.getSalario()));
             }
             System.out.println("-----------------------------------------------------------------------------\n");
         }
@@ -52,7 +51,7 @@ public class Principal {
 
         System.out.println("Funcionários que fazem aniversário no mês 10 e 12:");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        for (Funcionario funcionario : funcionarios) {
+        for (Funcionario funcionario : funcionariosExcluindoJoao) {
             if (funcionario.getDataNascimento().getMonthValue() == 10 ||
                     funcionario.getDataNascimento().getMonthValue() == 12) {
                 System.out.printf("Nome: %s, Data de Nascimento: %s\n", funcionario.getNome(),
@@ -62,43 +61,43 @@ public class Principal {
         System.out.println("-----------------------------------------------------------------------------\n");
         System.out.println("\n");
 
-        Funcionario maisVelho = FuncionarioUtil.encontrarMaisVelho(funcionarios);
+        Funcionario maisVelho = FuncionarioUtil.encontrarMaisVelho(funcionariosExcluindoJoao);
         int idade = LocalDate.now().getYear() - maisVelho.getDataNascimento().getYear();
         System.out.printf("Funcionário mais velho: %s, Idade: %d\n", maisVelho.getNome(), idade);
         System.out.println("-----------------------------------------------------------------------------\n");
 
-        funcionarios.sort(Comparator.comparing(Funcionario::getNome));
+        funcionariosExcluindoJoao.sort(Comparator.comparing(Funcionario::getNome));
         System.out.println("Funcionários por ordem alfabética:");
-        for (Funcionario funcionario : funcionarios) {
+        for (Funcionario funcionario : funcionariosExcluindoJoao) {
             System.out.println(funcionario.getNome());
         }
         System.out.println("-----------------------------------------------------------------------------\n");
 
-        BigDecimal totalSalarios = funcionarios.stream().map(Funcionario::getSalario)
+        BigDecimal totalSalarios = funcionariosExcluindoJoao.stream().map(Funcionario::getSalario)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        System.out.printf("Total dos salários dos funcionários: %s\n", formatarNumero(totalSalarios));
+        System.out.printf("Total dos salários dos funcionários: %s\n", FuncionarioUtil.formatarNumero(totalSalarios));
         System.out.println();
         System.out.println("-----------------------------------------------------------------------------\n");
         
         BigDecimal salarioMinimo = new BigDecimal("1212.00");
         System.out.println("Salários mínimos ganhos por cada funcionário:");
-        for (Funcionario funcionario : funcionarios) {
+        for (Funcionario funcionario : funcionariosExcluindoJoao) {
             BigDecimal salariosMinimos = funcionario.getSalario().divide(salarioMinimo, 2, RoundingMode.DOWN);
-            System.out.printf("%s: %s\n", funcionario.getNome(), formatarNumero(salariosMinimos));
+            System.out.printf("%s: %s\n", funcionario.getNome(), FuncionarioUtil.formatarNumero(salariosMinimos));
         }
     }
 
-    private static void imprimirFuncionarios(List<Funcionario> funcionarios) {
+    private static void imprimirFuncionarios(List<Funcionario> funcionariosExcluindoJoao) {
         System.out.println("Funcionários:");
         System.out.printf("%-20s %-20s %-15s %-20s%n", "Nome", "Data de Nascimento", "Salário", "Função");
         System.out.println("-----------------------------------------------------------------------------------------");
-        funcionarios.forEach(funcionario -> {
+        for (Funcionario funcionario : funcionariosExcluindoJoao) {
             System.out.printf("%-20s %-20s %-15s %-20s%n",
                     funcionario.getNome(),
                     funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    formatarNumero(funcionario.getSalario()),
+                    FuncionarioUtil.formatarNumero(funcionario.getSalario()),
                     funcionario.getFuncao());
-        });
+        }
         System.out.println("-----------------------------------------------------------------------------------------");
     }
 
@@ -107,14 +106,8 @@ public class Principal {
         System.out.println("-------------------------------------------------");
         for (int i = 0; i < funcionariosAntigos.size(); i++) {
             Funcionario atual = funcionariosAtuais.get(i);
-            System.out.printf("%-15s %-20s%n", atual.getNome(), formatarNumero(atual.getSalario()));
+            System.out.printf("%-15s %-20s%n", atual.getNome(), FuncionarioUtil.formatarNumero(atual.getSalario()));
         }
         System.out.println("------------------------------------------------- \n");
     }
-
-
-        private static String formatarNumero(BigDecimal numero) {
-            DecimalFormat df = new DecimalFormat("#,##0.00");
-            return df.format(numero);
-        }
-    }
+}

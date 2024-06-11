@@ -2,6 +2,7 @@ package model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Funcionario extends Pessoa {
     private BigDecimal salario;
@@ -35,9 +36,10 @@ public class Funcionario extends Pessoa {
         return funcao;
     }
 
-    public void aumentarSalario() {
+    public List<Funcionario> aumentarSalario(BigDecimal aumento2) {
         BigDecimal aumento = salario.multiply(BigDecimal.valueOf(0.1));
         salario = salario.add(aumento);
         salarioAtual = salario;
+		return null;
     }
 }
