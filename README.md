@@ -4,8 +4,6 @@ Este é um teste prático de programação que consiste no desenvolvimento de um
 
 ## Requisitos
 
-## Requisitos
-
 1. **Classe Pessoa:**
     - Atributos: `nome` (String) e `dataNascimento` (LocalDate).
 
